@@ -1,0 +1,58 @@
+{
+    "name": "MyWallet",
+    "version": "1.1",
+    "create_time": "2018-08-15 20:22:14",
+    "default_ont_id": "",
+    "default_account_address": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+    "scrypt": {
+        "n": 16384,
+        "r": 8,
+        "p": 8,
+        "dk_len": 64
+    },
+    "identities": [],
+    "accounts":[
+        {
+            "address":"ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
+            "key":"mWDJbkVESLBxUmwbcX9ZeMncRvmba8sx3YOejn5C0g22vvzubda6qMh4rkFu0N90",
+            "algorithm":"ECDSA",
+            "enc_alg": "aes-256-gcm",
+            "hash": "sha256",
+            "salt":"NgNnWTOJ0KlzfjRBhK1vIg==",
+            "parameters":{"curve":"P-256"},
+            "label":"me1",
+            "publicKey":"03036c12be3726eb283d078dff481175e96224f0b0c632c7a37e10eb40fe6be889",
+            "signatureScheme":"SHA256withECDSA",
+            "isDefault":true,
+            "lock":false
+        },
+        {
+            "address":"AYvTfgEyYduk3zEKMDnZggWQqt9bkASNxJ",
+            "key":"TbQ4BeALgaw5kKum3AthaTMyaQ5rabWvdrmhTaYZQElM28cYpeZqx5g2N7kJj3+a",
+            "algorithm":"ECDSA",
+            "enc_alg": "aes-256-gcm",
+            "hash": "sha256",
+            "salt":"2sxp7j+E8c3MFDaAf+0YNQ==",
+            "parameters":{"curve":"P-256"},
+            "label":"me2",
+            "publicKey":"02b51e2fc5bc971531830e2812b704cc5ce4a1e11afda5bdd5e6243b33d54218c3",
+            "signatureScheme":"SHA256withECDSA",
+            "isDefault":false,
+            "lock":false
+        },
+        {
+            "address":"AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve",
+            "key":"fl7HgnfI+CNMQ+ENJDe0ZWKk8NKHKj/y/DUnO1+sE8M5vfreP4Ykx4Ih+8wPt9bZ",
+            "algorithm":"ECDSA",
+            "enc_alg": "aes-256-gcm",
+            "hash": "sha256",
+            "salt":"yq8OatOk/rm6fm0XlVm0Ww==",
+            "parameters":{"curve":"P-256"},
+            "label":"me3",
+            "publicKey":"035384561673e76c7e3003e705e4aa7aee67714c8b68d62dd1fb3221f48c5d3da0",
+            "signatureScheme":"SHA256withECDSA",
+            "isDefault":false,
+            "lock":false
+        }
+    ]
+}

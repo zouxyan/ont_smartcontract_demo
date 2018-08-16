@@ -1,0 +1,1 @@
+{"functions":[{"name":"main","parameters":[{"name":"op","type":""},{"name":"args","type":""}],"returntype":""},{"name":"join","parameters":[{"name":"addr","type":"string"},{"name":"amount","type":"int"}],"returntype":"bool"},{"name":"is_game_ready","parameters":[{"name":"","type":""}],"returntype":""},{"name":"get_amounts","parameters":[{"name":"","type":""}],"returntype":""}]}
