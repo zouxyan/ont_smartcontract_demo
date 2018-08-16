@@ -1,6 +1,7 @@
 # conding=utf-8
 from boa.interop.System.Storage import GetContext, Get, Put, Delete
 from boa.interop.System.Runtime import Notify
+import random
 
 
 def main(op, args):
@@ -31,7 +32,6 @@ def main(op, args):
         Delete(context, args[0])
         return True
 
-
     return False
 
 
@@ -55,7 +55,7 @@ def join(addr, amount):
     Put(context, amount_key, float(amount))
     Put(context, 'count', count)
 
-    Notify('join successfully')
+    Notify(acc_key)
     return True
 
 
@@ -82,7 +82,8 @@ def is_game_ready():
 
 def get_amounts():
     """
-    after ready, gamer get the account balance, to check if the gamers has transfered their ont to
+
+    if ready, player get the account balance, to check if the players has transfered their ont to
     contract
     :return: sum of amounts
     """
@@ -91,3 +92,65 @@ def get_amounts():
 
     context = GetContext()
     return Get(context, 'amount1') + Get(context, 'amount2') + Get(context, 'amount3')
+
+
+def roll_dice(player):
+    """
+
+    :param player: 玩家账户地址
+    :return:
+    """
+    context = GetContext()
+    if Get(context, 'acc1') != player and Get(context, 'acc2') != player and Get(context, 'acc3') != player:
+        Notify('player not in the game')
+        return False
+
+    if Get(context, player) is not None:
+        Notify('you dice twice')
+        return False
+
+    num = random.randint(1, 6)
+    Put(context, player, num)
+    Notify(num)
+    # 最后一个玩家清算赌局
+    if is_3_dices_on_table():
+        acc1_num = Get(context, Get(context, 'acc1'))
+        acc2_num = Get(context, Get(context, 'acc2'))
+        acc3_num = Get(context, Get(context, 'acc3'))
+        max_val = max(acc1_num, acc2_num, acc3_num)
+
+        if acc1_num == max_val:
+            Put(context, 'winner', Get(context, 'acc1'))
+            pass  # 钱打给Get(context, 'acc1')
+
+        elif acc2_num == max_val:
+            Put(context, 'winner', Get(context, 'acc2'))
+            pass
+        else:
+            Put(context, 'winner', Get(context, 'acc3'))
+            pass
+        Delete(context, 'count')  # 一旦count被删除，意味着下一场赌局的开始
+    return True
+
+
+def is_3_dices_on_table():
+    """
+    pre-exec
+    :return:
+    """
+    context = GetContext()
+    acc1_num = Get(context, Get(context, 'acc1'))
+    acc2_num = Get(context, Get(context, 'acc2'))
+    acc3_num = Get(context, Get(context, 'acc3'))
+
+    if acc1_num is not None and acc2_num is not None and acc3_num is not None:
+        return True
+    return False
+
+
+def get_res():
+    context = GetContext()
+    res = Get(context, 'winner')
+    if res is None:
+        return False
+    return res
