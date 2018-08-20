@@ -1,18 +1,11 @@
 # coding=utf-8
-import base64
 import json
 import time
 
 from collections import namedtuple
-from ontology.crypto.signature_scheme import SignatureScheme
 from ontology.ont_sdk import OntologySdk
-from ontology.account.account import Account
 from ontology.smart_contract.neo_contract.abi.abi_info import AbiInfo
-from ontology.wallet.account import AccountData
 from ontology.common.address import Address
-
-
-# rpc_addr = "http://polaris3.ont.io:20336"
 
 
 class DemoClient(object):
