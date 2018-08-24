@@ -1,14 +1,14 @@
 {
     "name": "MyWallet",
     "version": "1.1",
-    "create_time": "2018-08-15 20:22:14",
+    "createTime": "2018-08-15 20:22:14",
     "default_ont_id": "",
     "default_account_address": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6",
     "scrypt": {
         "n": 16384,
         "r": 8,
         "p": 8,
-        "dk_len": 64
+        "dkLen": 64
     },
     "identities": [],
     "accounts":[

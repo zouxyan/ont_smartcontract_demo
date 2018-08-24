@@ -1,9 +1,9 @@
 from unittest import TestCase
-from ont_contrast.demo.cli.demo_cli import DemoClient
+from ont_contrast.demo.cli.demo_cli_a import DemoClient
 
 client = DemoClient("http://polaris3.ont.io:20336", "wallet.json", True, ["1", "060708", "060708"],
-                    "/Users/zou/PycharmProjects/ont_test/ont_contrast/demo/cli/demo.avm",
-                    "/Users/zou/PycharmProjects/ont_test/ont_contrast/demo/cli/abi.json")
+                    "/Users/zou/PycharmProjects/ont_test/ont_contrast/demo/cli/demo_a.avm",
+                    "/Users/zou/PycharmProjects/ont_test/ont_contrast/demo/cli/abi_a.json")
 
 
 class TestDemoCli(TestCase):

@@ -18,10 +18,6 @@ class DemoClient(object):
         self.sdk.rpc.set_address(rpc_addr)
         self.sdk.open_wallet(wallet_file)
         self.is_maker = is_maker  # 可以查询一个合约存不存在，存在就可以让maker是True，而不必自己指定了
-        # self.code = None
-        # self.contract_addr = None
-        # self.code_addr = None
-        # self.contract_acc = None
         self.__pwd = pwd
 
         self.__get_code_from_avm(avm_file)

@@ -34,6 +34,8 @@ if __name__ == '__main__':
     # aa = get_bytearray_addr('ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6', '1')
     # print(len(aa))
     # print(aa)
-    byte_arr = get_bytearray_addr('ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6', '1')
-    print(byte_arr)
-    print(get_val_from_bytes(byte_arr))
+    # byte_arr = get_bytearray_addr('ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6', '1')
+    # print(byte_arr)
+    a = [ 2, 123, 48, 51, 62, 13, 14, 101, 82, 174, 109, 29, 169, 249, 64, 159, 85, 30, 53, 238, 151, 25, 48, 94, 148, 93, 196, 220, 186, 153, 132, 86, 202]
+    print(get_val_from_bytes(a))
+
