@@ -8,6 +8,6 @@ Mainly realize a gambling game, three players participate, generate random numbe
 ## Token
 According to the OEP4 protocol, a smart contract for publishing tokens which has been tested and passed.
 
-
+## Links
 ONTIO's github: https://github.com/ontio 
 ONT website: https://ont.io/
