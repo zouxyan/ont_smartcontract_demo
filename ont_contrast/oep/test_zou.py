@@ -30,6 +30,9 @@ acc3 = sdk.get_wallet_manager().get_account('AazEvfQPcQ2GEFFPLF1ZLwQ7K5jDn81hve'
 
 
 class TokenTest(TestCase):
+    """
+    测试Token合约的功能
+    """
     def get_from_hex(self, res):
         """
         hex to string
@@ -59,6 +62,13 @@ class TokenTest(TestCase):
                      util.parse_neo_vm_contract_return_type_integer(json_res['Notify'][0]['States'][3])))
         except Exception:
             print('wrong notify')
+
+    def deploy_contract(self):
+        tx = sdk.neo_vm().make_deploy_transaction(code, True, 'token_zou', 'v1.0', 'zou', '', 'publish token',
+                                             acc1.get_address_base58(), 20000000, 500)
+        sdk.sign_transaction(tx, acc1)
+        res = sdk.get_rpc().send_raw_transaction(tx)
+        print(res)
 
     def test_name(self):
         func = abi_info.get_function('name')
