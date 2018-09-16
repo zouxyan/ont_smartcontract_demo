@@ -16,16 +16,23 @@ class BuildParams(object):
 
     @staticmethod
     def serialize_abi_function(abi_func: AbiFunction):
-        param_list = []
+        param_list = list()
         param_list.append(bytes(abi_func.name.encode()))
-        temp_list = []
+        temp_list = list()
         for param in abi_func.parameters:
-            temp_list.append(param.value)
+            try:
+                if isinstance(param.value, list):
+                    for item in param.value:
+                        temp_list.append(item)
+                else:
+                    temp_list.append(param.value)
+            except AttributeError:
+                pass
         param_list.append(temp_list)
         return BuildParams.create_code_params_script(param_list)
 
     @staticmethod
-    def create_code_params_script(param_list: [])->bytearray:
+    def create_code_params_script(param_list: []) -> bytearray:
         builder = ParamsBuilder()
         length = len(param_list)
         for j in range(length):
@@ -47,7 +54,7 @@ class BuildParams(object):
         return bytearray(builder.to_array())
 
     @staticmethod
-    def create_code_params_script_builder(param_list: [], builder: ParamsBuilder):
+    def create_code_params_script_builder(param_list: list, builder: ParamsBuilder):
         length = len(param_list)
         for j in range(length):
             i = length - 1 - j
@@ -68,7 +75,7 @@ class BuildParams(object):
         return builder.to_array()
 
     @staticmethod
-    def get_map_bytes(param_dict: {}):
+    def get_map_bytes(param_dict: dict):
         builder = ParamsBuilder()
         builder.emit(BuildParams.Type.maptype.value)
         builder.emit(util.bigint_to_neo_bytes(len(param_dict)))

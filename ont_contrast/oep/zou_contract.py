@@ -15,12 +15,12 @@ from boa.builtins import concat
 
 ctx = GetContext()
 
-NAME = 'xue'
-SYMBOL = 'XUE'
+NAME = 'che'
+SYMBOL = 'CHE'
 OWNER = bytearray(b'GV\xc9\xdd\x82\x9b!B\x88:\xdb\xe1\xaeO\x86\x89\xa1\xf6s\xe9')
 DECIMALS = 8
-FACTOR = 1000
-TOTAL_AMOUNT = 1000
+FACTOR = 100000000
+TOTAL_AMOUNT = 100000000
 
 TRANSFER_PREFIX = bytearray(b'\x01')
 APPROVE_PREFIX = bytearray(b'\x02 ')

@@ -55,8 +55,8 @@ class DemoClient(object):
         self.code = f.readline()
         code_addr_obj = Address.address_from_vm_code(self.code)
         self.code_addr = code_addr_obj.to_reverse_hex_str()
-        self.contract_acc = code_addr_obj.to_base58() # 合约地址是不是这个还得测试
-        self.contract_addr = code_addr_obj.to_byte_array()
+        self.contract_acc = code_addr_obj.to_base58()
+        self.contract_addr = code_addr_obj.to_byte_array() # 应该是这个地址
         f.close()
 
     def __get_abi_from_file(self, abi_file):
@@ -78,7 +78,7 @@ class DemoClient(object):
         acc = self.get_account_by_index(acc_index)
 
         func_join = self.abi_info.get_function("join")
-        func_join.set_params_value(acc.get_address_base58(), amount) # acc的输入格式不一定，toScriptHash？？
+        func_join.set_params_value(acc.get_address().to_byte_array(), amount)
 
         txid = self.sdk.neo_vm().send_transaction(self.contract_addr, acc, acc, 2000000, 500, func_join, False)
 

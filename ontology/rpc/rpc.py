@@ -5,9 +5,11 @@ import json
 import requests
 
 from ontology.rpc.define import *
-from ontology.core.transaction import Transaction
 from ontology.common.address import Address
+from ontology.common.error_code import ErrorCode
 from ontology.utils.util import get_asset_address
+from ontology.core.transaction import Transaction
+from ontology.exception.exception import SDKException
 
 
 class HttpRequest(object):
@@ -20,12 +22,15 @@ class HttpRequest(object):
     @staticmethod
     def request(method, url, payload):
         header = {'Content-type': 'application/json'}
-        if method == "post":
-            res = requests.post(url, json=payload, headers=header, timeout=HttpRequest._timeout)
-            return res
-        elif method == "get":
-            res = requests.get(url, params=json.dumps(payload), timeout=HttpRequest._timeout)
-            return res
+        try:
+            if method == "post":
+                res = requests.post(url, json=payload, headers=header, timeout=HttpRequest._timeout)
+                return res
+            elif method == "get":
+                res = requests.get(url, params=json.dumps(payload), timeout=HttpRequest._timeout)
+                return res
+        except requests.exceptions.MissingSchema as e:
+            raise SDKException(ErrorCode.connect_err(e.args[0]))
 
 
 class RpcClient(object):
@@ -189,22 +194,20 @@ class RpcClient(object):
         balance = json.loads(r.content.decode())["result"]
         return balance
 
-    def get_allowance(self, base58_address: str) -> str:
+    def get_allowance(self, asset_name: str, from_address: str, to_address: str) -> str:
         """
         This interface is used to get the the allowance
         from transfer-from account to transfer-to account in current network.
 
         Args:
-         base58_address (str):
+         from_address (str):
             a base58 encoded account address
 
         Return:
-            the information of smart contract event in dictionary form.
+            the information of allowance in dictionary form.
         """
 
-        contract_address = get_asset_address("ont")
-        b58_contract_address = Address(contract_address).b58encode()
-        rpc_struct = RpcClient.set_json_rpc_version(RPC_GET_ALLOWANCE, ["ong", b58_contract_address, base58_address])
+        rpc_struct = RpcClient.set_json_rpc_version(RPC_GET_ALLOWANCE, [asset_name, from_address, to_address])
         r = HttpRequest.request("post", self.addr, rpc_struct)
         allowance = json.loads(r.content.decode())["result"]
         return allowance
@@ -227,10 +230,10 @@ class RpcClient(object):
         rpc_struct = RpcClient.set_json_rpc_version(RPC_GET_STORAGE, [contract_address, key, 1])
         r = HttpRequest.request("post", self.addr, rpc_struct)
         s = json.loads(r.content.decode())["result"]
-        s = bytearray.fromhex(s)
-        value = (s[0]) | (s[1]) << 8 | (s[2]) << 16 | (s[3]) << 24 | (s[4]) << 32 | (s[5]) << 40 | (s[6]) << 48 | (
-            s[7]) << 56
-        return value
+        # s = bytearray.fromhex(s)
+        # value = (s[0]) | (s[1]) << 8 | (s[2]) << 16 | (s[3]) << 24 | (s[4]) << 32 | (s[5]) << 40 | (s[6]) << 48 | (
+        #     s[7]) << 56
+        return s
 
     def get_smart_contract_event_by_tx_hash(self, tx_hash: str) -> dict:
         """
@@ -270,31 +273,25 @@ class RpcClient(object):
         """
         This interface is used to get the corresponding transaction information based on the specified hash value.
 
-        Args:
-         tx_hash (str):
-            a hexadecimal hash value.
-
-        Return:
-            the information of transaction in dictionary form.
+        :param tx_hash: str, a hexadecimal hash value.
+        :return: dict
         """
-
         rpc_struct = RpcClient.set_json_rpc_version(RPC_GET_TRANSACTION, [tx_hash, 1])
         r = HttpRequest.request("post", self.addr, rpc_struct)
         tx = json.loads(r.content.decode())["result"]
         return tx
 
-    def get_smart_contract(self, contract_address) -> dict:
+    def get_smart_contract(self, contract_address: str) -> dict:
         """
         This interface is used to get the information of smart contract based on the specified hexadecimal hash value.
 
-        Args:
-         contract_address (str):
-            a hexadecimal hash value.
-
-        Return:
-            the information of smart contract in dictionary form.
+        :param contract_address: str, a hexadecimal hash value.
+        :return: the information of smart contract in dictionary form.
         """
-
+        if type(contract_address) != str:
+            raise SDKException(ErrorCode.param_err('a hexadecimal contract address is required.'))
+        if len(contract_address) != 40:
+            raise SDKException(ErrorCode.param_err('the length of the contract address should be 40 bytes.'))
         rpc_struct = RpcClient.set_json_rpc_version(RPC_GET_SMART_CONTRACT, [contract_address, 1])
         r = HttpRequest.request("post", self.addr, rpc_struct)
         contract = json.loads(r.content.decode())["result"]
@@ -336,7 +333,7 @@ class RpcClient(object):
         data = json.loads(r.content.decode())
         res = data["result"]
         if data["error"] != 0:
-            raise Exception(res)
+            raise SDKException(ErrorCode.other_error(res))
         return res
 
     def send_raw_transaction_pre_exec(self, tx: Transaction):
@@ -358,7 +355,11 @@ class RpcClient(object):
         res = json.loads(r.content.decode())
         err = res["error"]
         if err > 0:
-            raise RuntimeError("error > 0")
+            try:
+                result = res['result']
+                raise RuntimeError(result)
+            except KeyError:
+                raise RuntimeError('send raw transaction pre-execute error')
         if res["result"]["State"] == 0:
             raise RuntimeError("State = 0")
         return res["result"]["Result"]

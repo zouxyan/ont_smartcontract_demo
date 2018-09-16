@@ -1,29 +1,45 @@
-from boa.interop.System.Storage import *
 from boa.interop.System.Runtime import *
+from boa.interop.Ontology.Native import *
 from boa.interop.System.ExecutionEngine import *
-from boa.interop.Ontology.Native import Invoke
+from boa.builtins import state
 
-ctx = GetContext()
-selfAddr = GetExecutingScriptHash()
 contractAddress = bytearray(b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01')
+selfAddr1 = GetExecutingScriptHash()
 
 
-def main(op, args):
-    if op == 'to_sc':
-        return to_sc(args[0])
+def Main(operation, args):
+    if operation == 'to_sc':
+        from_acct = args[0]
+        amount = args[1]
+        return to_sc(from_acct, amount)
 
+    if operation == 'from_sc':
+        to_acc = args[0]
+        amount = args[1]
+        return from_sc(to_acc, amount)
     return False
 
 
-def to_sc(acc):
-    if not CheckWitness(acc):
-        return False
-    param = [acc, selfAddr, 10]
-    res = Invoke(ver=1, contractAddress=contractAddress, method='transfer', param=[param])
+def to_sc(from_acct, amount):
+    if CheckWitness(from_acct):
+        param = makeState(from_acct, selfAddr1, amount)
+        res = Invoke(1, contractAddress, 'transfer', [param])
+        Notify(res)
+        if res and res == b'\x01':
+            Notify("succeed")
+        else:
+            Notify("failed")
+
+
+def from_sc(to_acc, amount):
+    param = makeState(selfAddr1, to_acc, amount)
+    res = Invoke(1, contractAddress, 'transfer', [param])
     Notify(res)
     if res and res == b'\x01':
-        Notify('transfer succeed')
-        return True
+        Notify("succeed")
     else:
-        Notify('transfer failed')
-        return False
+        Notify("failed")
+
+
+def makeState(fromacct,toacct,amount):
+    return state(fromacct, toacct, amount)

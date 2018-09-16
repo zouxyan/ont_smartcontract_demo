@@ -1,0 +1,29 @@
+{
+    "Owners": [
+        {
+            "PubKeyId": "did:ont:AYvTfgEyYduk3zEKMDnZggWQqt9bkASNxJ#keys-1", 
+            "Type": "ECDSA", 
+            "Curve": "P256", 
+            "Value": "02b51e2fc5bc971531830e2812b704cc5ce4a1e11afda5bdd5e6243b33d54218c3"
+        }
+    ], 
+    "Attributes": [
+        {
+            "Key": "stones", 
+            "Type": "leader",
+            "Value": "cool boy"
+        }, 
+        {
+            "Key": "zou", 
+            "Type": "intern", 
+            "Value": "fat boy"
+        }, 
+        {
+            "Key": "cheche", 
+            "Type": "employee", 
+            "Value": "cool and fat boy"
+        }
+    ], 
+    "Recovery": "ANH5bHrrt111XwNEnuPZj6u95Dd6u7G4D6", 
+    "OntId": "did:ont:AYvTfgEyYduk3zEKMDnZggWQqt9bkASNxJ"
+}
