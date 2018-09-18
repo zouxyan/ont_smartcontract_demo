@@ -60,7 +60,7 @@
 #### **使用方法**
 
  ```
-1. smartx编译代码，并将字节码、abi复制到utils下的tools模块，生成sdk对象等必需工具；
+1. smartx编译代码，并将字节码、abi复制到utils下的tools模块的code和abi，生成sdk对象等必需工具；
 2. Simulator部署合约至测试网；
 3. Simulator初始化合约状态，即比赛状态
 4. Simulator调用接口模拟每轮比赛：利用随机数，随机产生球员动作，命中率等参数，使整个过程更加逼近现实
